@@ -1,0 +1,44 @@
+packagecom.example.menuapp
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+
+class AddDishActivity : AppCompatActivity() {
+    
+    private val courses = listOf("Starter", "Main", "Dessert")
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_add_dish)
+
+        val nameInput: EditText = findViewById(R.id.nameInput)
+        val descInput: EditText = findViewById(R.id.descriptionInput)
+        val priceInput: EditText = findViewById(R.id.priceInput)
+        val spinner: Spinner = findViewById(R.id.courseSpinner)
+        val saveButton: Button = findViewById(R.id.saveButton)
+
+        // Spinner setup
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, courses)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        saveButton.setOnClickListener {
+            val name = nameInput.text.toString()
+            val description = descInput.text.toString()
+            val course = spinner.selectedItem.toString()
+            val price = priceInput.text.toString().toDoubleOrNull() ?: 0.0
+
+            val resultIntent = Intent().apply {
+                putExtra("name", name)
+                putExtra("description", description)
+                putExtra("course", course)
+                putExtra("price", price)
+            }
+            setResult(Activity.RESULT_OK, resultIntent)
+            finish()
+        }
+    }
+}
